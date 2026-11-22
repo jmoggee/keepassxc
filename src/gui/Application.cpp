@@ -25,6 +25,7 @@
 #include "gui/MessageBox.h"
 #include "gui/osutils/OSUtils.h"
 #include "gui/styles/dark/DarkStyle.h"
+#include "gui/styles/tokyonight/TokyoNightStyle.h"
 #include "gui/styles/light/LightStyle.h"
 
 #include <QFileInfo>
@@ -181,6 +182,11 @@ void Application::applyTheme()
         m_darkTheme = false;
     } else if (appTheme == "dark") {
         auto* s = new DarkStyle;
+        setPalette(s->standardPalette());
+        setStyle(s);
+        m_darkTheme = true;
+    } else if (appTheme == "tokyonight") {
+        auto* s = new TokyoNightStyle;
         setPalette(s->standardPalette());
         setStyle(s);
         m_darkTheme = true;

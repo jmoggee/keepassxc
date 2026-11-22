@@ -386,6 +386,7 @@
      <addaction name="actionThemeAuto"/>
      <addaction name="actionThemeLight"/>
      <addaction name="actionThemeDark"/>
+     <addaction name="actionThemeTokyoNight"/>
      <addaction name="actionThemeClassic"/>
     </widget>
     <addaction name="menuTheme"/>
@@ -1175,6 +1176,17 @@
    </property>
    <property name="toolTip">
     <string>Set Theme: Dark</string>
+   </property>
+  </action>
+  <action name="actionThemeTokyoNight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tokyo Night</string>
+   </property>
+   <property name="toolTip">
+    <string>Set Theme: Tokyo Night</string>
    </property>
   </action>
   <action name="actionThemeClassic">

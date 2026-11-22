@@ -1,0 +1,46 @@
+DatabaseWidget:!active,
+DatabaseWidget #groupView:!active, DatabaseWidget #tagView:!active,
+EntryPreviewWidget *:!active[blendIn="true"] {
+    background-color: #16161E;
+}
+
+DatabaseWidget:disabled,
+DatabaseWidget #groupView:disabled, DatabaseWidget #tagView:disabled,
+EntryPreviewWidget *:disabled[blendIn="true"] {
+    background-color: #1F2335;
+}
+
+QMenu {
+    border: 1px solid #3B4261;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: #3B4261;
+}
+
+QPushButton:!default:hover {
+    background: #3B4261;
+}
+
+QPushButton:default:hover, QPushButton:checked:hover {
+    background: #3D59A1;
+}
+
+QToolTip {
+    color: #C0CAF5;
+    background-color: #24283B;
+}
+
+QGroupBox {
+    background-color: palette(light);
+}
+
+QGroupBox::title {
+    color: #7AA2F7;
+}
+
+DatabaseOpenWidget #centralStack, DatabaseOpenWidget #publicSummaryLabel {
+    border: 1px solid #3B4261;
+    border-radius: 6px;
+}

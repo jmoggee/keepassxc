@@ -104,6 +104,7 @@ set(gui_SOURCES
         gui/styles/base/BaseStyle.cpp
         gui/styles/dark/DarkStyle.cpp
         gui/styles/light/LightStyle.cpp
+        gui/styles/tokyonight/TokyoNightStyle.cpp
         gui/AboutDialog.cpp
         gui/ActionCollection.cpp
         gui/Application.cpp
