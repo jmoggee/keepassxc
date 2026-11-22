@@ -893,6 +893,12 @@ void BrowserService::addEntry(const EntryParameters& entryParameters,
     entry->setIcon(KEEPASSXCBROWSER_DEFAULT_ICON);
     entry->setUsername(entryParameters.login);
     entry->setPassword(entryParameters.password);
+    if (!entryParameters.notes.isEmpty()) {
+        entry->setNotes(entryParameters.notes);
+    }
+    for (auto it = entryParameters.stringFields.constBegin(); it != entryParameters.stringFields.constEnd(); ++it) {
+        entry->attributes()->set(it.key(), it.value());
+    }
 
     // Select a group for the entry
     if (!group.isEmpty()) {

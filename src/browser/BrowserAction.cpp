@@ -325,6 +325,22 @@ QJsonObject BrowserAction::handleSetLogin(const QJsonObject& json, const QString
     entryParameters.formUrl = submitUrl;
     entryParameters.realm = realm;
 
+    // Notes and "KPH: " attributes for a new entry, e.g. the provider a site signs in with
+    entryParameters.notes = browserRequest.getString("notes");
+    const auto stringFields = browserRequest.getArray("stringFields");
+    for (const auto& field : stringFields) {
+        const auto fieldObject = field.toObject();
+        for (auto it = fieldObject.constBegin(); it != fieldObject.constEnd(); ++it) {
+            const auto value = it.value().toString();
+            if (it.key().startsWith(QStringLiteral("KPH: ")) && !EntryPlaceholders::containsPlaceholder(value)) {
+                entryParameters.stringFields.insert(it.key(), value);
+            }
+        }
+    }
+    if (EntryPlaceholders::containsPlaceholder(entryParameters.notes)) {
+        return getErrorReply(action, ERROR_KEEPASS_CANNOT_USE_REFERENCES);
+    }
+
     bool result = true;
     if (uuid.isEmpty()) {
         auto dlFavicon = !downloadFavicon.isEmpty() && downloadFavicon.compare(TRUE_STR) == 0;

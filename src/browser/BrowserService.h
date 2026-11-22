@@ -54,6 +54,9 @@ struct EntryParameters
     QString siteUrl;
     QString formUrl;
     bool httpAuth;
+    // Only used when the browser adds a new entry
+    QString notes;
+    QMap<QString, QString> stringFields;
 };
 
 class DatabaseWidget;
