@@ -208,6 +208,8 @@ public:
         PasswordGenerator_WordSeparator,
         PasswordGenerator_WordList,
         PasswordGenerator_WordCase,
+        PasswordGenerator_ExtraDigits,
+        PasswordGenerator_ExtraSymbols,
         PasswordGenerator_Type,
 
         Messages_NoLegacyKeyFileWarning,

@@ -40,6 +40,8 @@ public:
     void setWordCase(PassphraseWordCase wordCase);
     void setDefaultWordList();
     void setWordSeparator(const QString& separator);
+    void setExtraDigits(int count);
+    void setExtraSymbols(int count);
     bool isWordListValid() const;
 
     QString generatePassphrase() const;
@@ -47,12 +49,15 @@ public:
     static const int DefaultWordCount;
     static const char* DefaultSeparator;
     static const char* DefaultWordList;
+    static const char* ExtraSymbolSet;
 
 private:
     int m_wordCount;
     int m_minWordListSize = 1296;
     PassphraseWordCase m_wordCase;
     QString m_separator;
+    int m_extraDigits = 0;
+    int m_extraSymbols = 0;
     QList<QString> m_wordlist;
 
     friend class TestPassphraseGenerator;

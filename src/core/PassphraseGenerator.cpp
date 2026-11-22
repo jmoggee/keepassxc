@@ -29,6 +29,8 @@
 const int PassphraseGenerator::DefaultWordCount = 7;
 const char* PassphraseGenerator::DefaultSeparator = " ";
 const char* PassphraseGenerator::DefaultWordList = "eff_large.wordlist";
+// Symbols most sites accept
+const char* PassphraseGenerator::ExtraSymbolSet = "!#$%&*+-=?@^_";
 
 PassphraseGenerator::PassphraseGenerator()
     : m_wordCount(DefaultWordCount)
@@ -47,7 +49,9 @@ double PassphraseGenerator::estimateEntropy(int wordCount)
         wordCount = m_wordCount;
     }
 
-    return std::log2(m_wordlist.size()) * wordCount;
+    // Extra characters are counted for their value only, not their position, so this stays conservative
+    return std::log2(m_wordlist.size()) * wordCount + std::log2(10.0) * m_extraDigits
+           + std::log2(static_cast<double>(qstrlen(ExtraSymbolSet))) * m_extraSymbols;
 }
 
 void PassphraseGenerator::setWordCount(int wordCount)
@@ -115,6 +119,16 @@ void PassphraseGenerator::setWordSeparator(const QString& separator)
     m_separator = separator;
 }
 
+void PassphraseGenerator::setExtraDigits(int count)
+{
+    m_extraDigits = qMax(0, count);
+}
+
+void PassphraseGenerator::setExtraSymbols(int count)
+{
+    m_extraSymbols = qMax(0, count);
+}
+
 QString PassphraseGenerator::generatePassphrase() const
 {
     if (m_wordlist.isEmpty()) {
@@ -143,6 +157,19 @@ QString PassphraseGenerator::generatePassphrase() const
             break;
         }
         words.append(tmpWord);
+    }
+
+    // Stick each extra digit or symbol onto the end of a randomly chosen word
+    const QString symbols = QString::fromLatin1(ExtraSymbolSet);
+    auto appendToRandomWord = [&words](QChar c) {
+        auto i = randomGen()->randomUInt(static_cast<quint32>(words.size()));
+        words[static_cast<int>(i)].append(c);
+    };
+    for (int i = 0; i < m_extraDigits; ++i) {
+        appendToRandomWord(QChar('0' + static_cast<int>(randomGen()->randomUInt(10))));
+    }
+    for (int i = 0; i < m_extraSymbols; ++i) {
+        appendToRandomWord(symbols.at(static_cast<int>(randomGen()->randomUInt(static_cast<quint32>(symbols.size())))));
     }
 
     return words.join(m_separator);

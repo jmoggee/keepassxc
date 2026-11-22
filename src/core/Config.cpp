@@ -234,6 +234,8 @@ static const QHash<Config::ConfigKey, ConfigDirective> configStrings = {
     {Config::PasswordGenerator_WordSeparator, {QS("PasswordGenerator/WordSeparator"), Roaming, QS(" ")}},
     {Config::PasswordGenerator_WordList, {QS("PasswordGenerator/WordList"), Roaming, QS("eff_large.wordlist")}},
     {Config::PasswordGenerator_WordCase, {QS("PasswordGenerator/WordCase"), Roaming, 0}},
+    {Config::PasswordGenerator_ExtraDigits, {QS("PasswordGenerator/ExtraDigits"), Roaming, 0}},
+    {Config::PasswordGenerator_ExtraSymbols, {QS("PasswordGenerator/ExtraSymbols"), Roaming, 0}},
     {Config::PasswordGenerator_Type, {QS("PasswordGenerator/Type"), Roaming, 0}},
 
     // Messages

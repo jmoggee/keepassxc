@@ -69,3 +69,30 @@ void TestPassphraseGenerator::testUniqueEntriesInWordlist()
     // so this fails
     QVERIFY(!generator.isWordListValid());
 }
+
+void TestPassphraseGenerator::testExtraCharacters()
+{
+    PassphraseGenerator generator;
+    generator.setWordSeparator(" ");
+    generator.setWordCount(5);
+    const double baseEntropy = generator.estimateEntropy();
+
+    generator.setExtraDigits(3);
+    generator.setExtraSymbols(2);
+    QVERIFY(generator.estimateEntropy() > baseEntropy);
+
+    QRegularExpression word("^[a-z-]+[0-9!#$%&*+=?@^_-]*$");
+    for (int run = 0; run < 50; ++run) {
+        const auto passphrase = generator.generatePassphrase();
+        const auto words = passphrase.split(" ");
+        QCOMPARE(words.size(), 5);
+        for (const auto& w : words) {
+            QVERIFY2(word.match(w).hasMatch(), qPrintable(passphrase));
+        }
+        int digits = 0;
+        for (const auto& c : passphrase) {
+            digits += c.isDigit() ? 1 : 0;
+        }
+        QCOMPARE(digits, 3);
+    }
+}

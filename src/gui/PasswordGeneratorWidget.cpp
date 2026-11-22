@@ -80,6 +80,8 @@ PasswordGeneratorWidget::PasswordGeneratorWidget(QWidget* parent)
     connect(m_ui->optionButtons, SIGNAL(buttonClicked(QAbstractButton*)), SLOT(updateGenerator()));
     connect(m_ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateGenerator()));
     connect(m_ui->wordCaseComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateGenerator()));
+    connect(m_ui->spinBoxExtraDigits, SIGNAL(valueChanged(int)), SLOT(updateGenerator()));
+    connect(m_ui->spinBoxExtraSymbols, SIGNAL(valueChanged(int)), SLOT(updateGenerator()));
 
     // set font size of password quality, characters, and entropy labels dynamically to 80% of
     // the default font size, but make it no smaller than 8pt
@@ -184,6 +186,8 @@ void PasswordGeneratorWidget::loadSettings()
         m_ui->comboBoxWordList->setCurrentIndex(i);
     }
     m_ui->wordCaseComboBox->setCurrentIndex(config()->get(Config::PasswordGenerator_WordCase).toInt());
+    m_ui->spinBoxExtraDigits->setValue(config()->get(Config::PasswordGenerator_ExtraDigits).toInt());
+    m_ui->spinBoxExtraSymbols->setValue(config()->get(Config::PasswordGenerator_ExtraSymbols).toInt());
 
     // Password or diceware?
     m_ui->tabWidget->setCurrentIndex(config()->get(Config::PasswordGenerator_Type).toInt());
@@ -225,6 +229,8 @@ void PasswordGeneratorWidget::saveSettings()
     config()->set(Config::PasswordGenerator_WordSeparator, m_ui->editWordSeparator->text());
     config()->set(Config::PasswordGenerator_WordList, m_ui->comboBoxWordList->currentData());
     config()->set(Config::PasswordGenerator_WordCase, m_ui->wordCaseComboBox->currentIndex());
+    config()->set(Config::PasswordGenerator_ExtraDigits, m_ui->spinBoxExtraDigits->value());
+    config()->set(Config::PasswordGenerator_ExtraSymbols, m_ui->spinBoxExtraSymbols->value());
 
     // Password or diceware?
     config()->set(Config::PasswordGenerator_Type, m_ui->tabWidget->currentIndex());
@@ -603,6 +609,8 @@ void PasswordGeneratorWidget::updateGenerator()
         m_dicewareGenerator->setWordList(path);
 
         m_dicewareGenerator->setWordSeparator(m_ui->editWordSeparator->text());
+        m_dicewareGenerator->setExtraDigits(m_ui->spinBoxExtraDigits->value());
+        m_dicewareGenerator->setExtraSymbols(m_ui->spinBoxExtraSymbols->value());
 
         m_ui->labelWordListWarning->setVisible(!m_dicewareGenerator->isWordListValid());
         m_ui->buttonGenerate->setEnabled(true);
