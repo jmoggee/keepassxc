@@ -33,6 +33,7 @@
 #include <botan/pubkey.h>
 #include <botan/rsa.h>
 #include <botan/sodium.h>
+#include <botan/version.h>
 
 #include <bitset>
 
@@ -354,8 +355,18 @@ QByteArray BrowserPasskeys::buildSignature(const QByteArray& authenticatorData,
         if (algName == "ECDSA") {
             Botan::ECDSA_PrivateKey privateKey(algId, privateKeyBytes);
 #ifdef WITH_BOTAN3
+#if BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(3, 14, 0)
+            // starting with Botan 3.14.0 ECDSA signatures are randomized by default
+            // and no longer deterministic as before. Setting to deterministic
+            // as discussed in https://codeberg.org/ChiPass/ChiPass/issues/260
+            Botan::PK_Signer signer(privateKey,
+                                    *randomGen()->getRng(),
+                                    "EMSA1(SHA-256),Deterministic",
+                                    Botan::Signature_Format::DerSequence);
+#else
             Botan::PK_Signer signer(
                 privateKey, *randomGen()->getRng(), "EMSA1(SHA-256)", Botan::Signature_Format::DerSequence);
+#endif
 #else
             Botan::PK_Signer signer(privateKey, *randomGen()->getRng(), "EMSA1(SHA-256)", Botan::DER_SEQUENCE);
 #endif
